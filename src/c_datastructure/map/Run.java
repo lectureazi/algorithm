@@ -19,6 +19,12 @@ public class Run {
         schoolMap.put("민사고", minsa);
         schoolMap.put("멀캠", multicampus);
         schoolMap.put("세명초", semyeong);
+        
+        for (Entry<String, School> entry : schoolMap.entrySet()) {
+            System.out.println(entry);
+        }
+        
+        System.out.println("=============put(수정)==============");
 
         // 중복된 키로 데이터를 저장.
         // 기존 데이터를 덮어씀

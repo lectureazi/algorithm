@@ -73,8 +73,15 @@ public class _LinkedList<E> implements Iterable<E> {
 			throw new ArrayIndexOutOfBoundsException();
 		}
 		
-		Node<E> link = head;
+		if(index == 0) {
+			E prev = head.data();
+			head = head.next();
+			size--;
+			return prev;
+		}
+		
 		Node<E> prevNode = head;
+		Node<E> link = head.next();
 		for (int i = 0; i < index; i++) {
 			prevNode = link;
 			link = link.next();

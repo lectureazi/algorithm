@@ -12,10 +12,17 @@ public class Run {
             bst.insert(num);
         }
 
-        for (Integer num : nums) {
-            System.out.println(bst.find(num));
-        }
-
-        bst.bfs();
+        System.out.println(bst.inOrderRecursive());
+        System.out.println(bst.preOrderRecursive());
+        System.out.println(bst.postOrderRecursive());
+        
+        System.out.println("=================================");
+        
+        System.out.println(bst.inOrder());
+        System.out.println(bst.preOrder());
+        System.out.println(bst.postOrder());
+        
+        System.out.println("=================================");
+        System.out.println(bst.bfs());
     }
 }

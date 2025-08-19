@@ -59,7 +59,9 @@ public class _HashSet_P3<E> implements Iterable<E>{
         _LinkedList<E> row = (_LinkedList<E>) table[index];
 
         if (row == null) {
-            createNewRow(data, index);
+            _LinkedList<E> newRow = new _LinkedList<>();
+            newRow.add(data);
+            table[index] = newRow;
             size++;
             return true;
         }
@@ -68,13 +70,6 @@ public class _HashSet_P3<E> implements Iterable<E>{
         row.add(data);
         size++;
         return true;
-
-    }
-
-    private void createNewRow(E data, int index) {
-        _LinkedList<E> newRow = new _LinkedList<>();
-        newRow.add(data);
-        table[index] = newRow;
     }
 
     public boolean remove(E data){
@@ -84,21 +79,16 @@ public class _HashSet_P3<E> implements Iterable<E>{
         if(row == null){
             return false;
         }
-
-        for (int i = 0; i < row.size(); i++) {
-            if(row.get(i).equals(data)){
-                row.remove(i);
-                size--;
-
-                if(row.isEmpty()){
-                    table[index] = null;
-                }
-
-                return true;
-            }
+        
+        if(!row.contains(data)) return false;
+        row.remove(row.indexOf(data));
+        
+        if(row.isEmpty()){
+            table[index] = null;
         }
-
-        return false;
+        
+        size--;
+        return true;
     }
 
     @Override

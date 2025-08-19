@@ -3,6 +3,8 @@ package c_datastructure.bst;
 import c_datastructure.list._LinkedList;
 import c_datastructure.queue._Queue;
 import c_datastructure.stack._Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BinarySearchTree<E extends Comparable<E>> {
 
@@ -63,14 +65,32 @@ public class BinarySearchTree<E extends Comparable<E>> {
             }
         }
     }
+    
+    // dfs : 깊이 우선 탐색
+    //        하나의 경로를 최대한 깊숙이 따라 들어간 후,
+    //        더 이상 탐색할 수 없는 곳에 도달하면 되돌아와서(백트래킹) 다른 경로를 탐색
+    // 이벤트 캡처링, 이벤트 버블링
+    public List<E> inOrderRecursive() {
+        List<E> result = new ArrayList<>();
+        inOrderHelper(root, result);
+        return result;
+    }
+    
+    private void inOrderHelper(Node<E> node, List<E> result) {
+        if (node == null) {
+            return;
+        }
+        inOrderHelper(node.getLeft(), result);
+        result.add(node.data);
+        inOrderHelper(node.getRight(), result);
+    }
 
-    public void inOrder(){
+    public _LinkedList<Node<E>> inOrder(){
         _Stack<Node<E>> stack = new _Stack<>();
         _LinkedList<Node<E>> list = new _LinkedList<>();
         Node<E> pointer = root;
 
         while(pointer != null || !stack.isEmpty()){
-
             while(pointer != null) {
                 stack.push(pointer);
                 pointer = pointer.getLeft();
@@ -79,20 +99,32 @@ public class BinarySearchTree<E extends Comparable<E>> {
             pointer = stack.pop();
             list.add(pointer);
             pointer = pointer.getRight();
-        };
-
-        for (Node<E> node : list) {
-            System.out.print(node.data + " ");
         }
+
+        return list;
+    }
+    
+    public List<E> preOrderRecursive() {
+        List<E> result = new ArrayList<>();
+        preOrderHelper(root, result);
+        return result;
+    }
+    
+    private void preOrderHelper(Node<E> node, List<E> result) {
+        if (node == null) {
+            return;
+        }
+        result.add(node.data);          // 현재 노드 추가
+        preOrderHelper(node.getLeft(), result);    // 왼쪽 자식 순회
+        preOrderHelper(node.getRight(), result);   // 오른쪽 자식 순회
     }
 
-    public void preOrder(){
+    public _LinkedList<Node<E>> preOrder(){
         _Stack<Node<E>> stack = new _Stack<>();
         _LinkedList<Node<E>> list = new _LinkedList<>();
         stack.push(root);
 
         while (!stack.isEmpty()) {
-
             Node<E> pointer = stack.pop();
             list.add(pointer);
 
@@ -105,49 +137,59 @@ public class BinarySearchTree<E extends Comparable<E>> {
             }
         }
 
-        for (Node<E> node : list) {
-            System.out.println(node);
+        return list;
+    }
+    
+    public List<E> postOrderRecursive() {
+        List<E> result = new ArrayList<>();
+        postOrderHelper(root, result);
+        return result;
+    }
+    
+    private void postOrderHelper(Node<E> node, List<E> result) {
+        if (node == null) {
+            return;
         }
+        postOrderHelper(node.getLeft(), result);   // 왼쪽 자식 순회
+        postOrderHelper(node.getRight(), result);  // 오른쪽 자식 순회
+        result.add(node.data);         // 현재 노드 추가
     }
 
-    public void postOrder(){
+    public _Stack<Node<E>> postOrder(){
         _Stack<Node<E>> stack = new _Stack<>();
         _Stack<Node<E>> elements = new _Stack<>();
-
         stack.push(root);
-
-        while (true) {
-            if(stack.isEmpty()) break;
-
+        
+        while (!stack.isEmpty()) {
             Node<E> pointer = stack.pop();
-            elements.push(pointer);
-
+            
             if (pointer.getLeft() != null) {
                 stack.push(pointer.getLeft());
             }
-
+            
             if (pointer.getRight() != null) {
                 stack.push(pointer.getRight());
             }
+            
+            elements.push(pointer);
         }
-
-        for (Node<E> element : elements) {
-            System.out.println(element);
-        }
+        return elements;
     }
-
-    public void bfs(){
+    
+    // bfs(Breadth-First Search) : 넓이 우선 탐색
+    // 현재 노드와 인접한 모든 노드를 먼저 탐색한 후, 그 다음 레벨의 노드들을 탐색하는 방식
+    // DB B+트리 인덱스 데이터
+    public _LinkedList<E> bfs(){
         _Queue<Node<E>> queue = new _Queue<>();
+        _LinkedList<E> result = new _LinkedList<>();
         queue.enqueue(root);
-        int level = 0;
 
         while(!queue.isEmpty()){
-            System.out.print("level " + level + ": ");
             int size = queue.size();
 
             for (int i = 0; i < size; i++) {
                 Node<E> node = queue.dequeue();
-                System.out.print(node.data + " ");
+                result.add(node.data);
 
                 if(node.getLeft() != null){
                     queue.enqueue(node.getLeft());
@@ -157,9 +199,8 @@ public class BinarySearchTree<E extends Comparable<E>> {
                     queue.enqueue(node.getRight());
                 }
             }
-
-            System.out.println();
-            level++;
         }
+        
+        return result;
     }
 }

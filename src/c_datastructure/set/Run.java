@@ -30,9 +30,9 @@ public class Run {
         set.remove(seoulUniv);
         System.out.println(set);
         
-        for (School school : set){
-            System.out.println(school);
-        }
+//        for (School school : set){
+//            System.out.println(school);
+//        }
 
     }
 

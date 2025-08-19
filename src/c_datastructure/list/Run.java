@@ -13,9 +13,9 @@ public class Run {
 		//testAdd();
 		//testGet();
 		//testSet();
-		//testRemove();
+		testRemove();
 		//testSchool();
-		testIterable();
+		//testIterable();
 	}
 	
 	static void testAdd() {
@@ -49,7 +49,7 @@ public class Run {
 			list.add(i);
 		}
 		
-		for (int i = 5; i < 8; i++) {
+		for (int i = 0; i < 5; i++) {
 			list.set(i, 9999);
 		}
 		
@@ -63,10 +63,8 @@ public class Run {
 			list.add(i);
 		}
 		
-		for (int i = 5; i < 8; i++) {
-			list.remove(i);
-		}
-		
+		System.out.println(list);
+		list.remove(0);
 		System.out.println(list);
 	}
 	

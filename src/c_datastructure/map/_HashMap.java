@@ -3,9 +3,6 @@ package c_datastructure.map;
 import c_datastructure.list._LinkedList;
 import c_datastructure.set._HashSet_P3;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 @SuppressWarnings("unchecked")
 public class _HashMap<K, V> {
 
@@ -54,7 +51,7 @@ public class _HashMap<K, V> {
         _LinkedList<Entry<K,V>> row = ( _LinkedList<Entry<K,V>>) table[index];
 
         if (row == null) {
-            createNewRow(entry, index);
+            createRow(entry, index);
             entrySet.add(entry);
             size++;
             return null;
@@ -98,25 +95,19 @@ public class _HashMap<K, V> {
         if(row == null){
             return null;
         }
-
-        for (int i = 0; i < row.size(); i++) {
-
-            Entry<K,V> dummy = new Entry<K,V>(key,null);
-
-            if(row.get(i).equals(dummy)){
-                V prev = row.remove(i).getValue();
-                entrySet.remove(dummy);
-                size--;
-
-                if(row.isEmpty()){
-                    table[index] = null;
-                }
-
-                return prev;
-            }
+        
+        Entry<K,V> dummy = new Entry<K,V>(key,null);
+        
+        if(!row.contains(dummy)) return null;
+        V prev = row.remove(row.indexOf(dummy)).getValue();
+        entrySet.remove(dummy);
+        
+        if(row.isEmpty()){
+            table[index] = null;
         }
-
-        return null;
+        
+        size--;
+        return prev;
     }
 
     public _HashSet_P3<Entry<K,V>> entrySet(){
@@ -131,7 +122,7 @@ public class _HashMap<K, V> {
         return row.contains(new Entry<K,V>(key,null));
     }
 
-    private void createNewRow(Entry<K, V> data, int index) {
+    private void createRow(Entry<K, V> data, int index) {
         _LinkedList<Entry<K,V>> newRow = new _LinkedList<>();
         newRow.add(data);
         table[index] = newRow;

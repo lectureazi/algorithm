@@ -7,7 +7,7 @@ public class MathQuiz {
 //		System.out.println(gcd2(12, 18));
 //		System.out.println(lcm(12, 18));
 //		System.out.println(factorial1(5));
-		System.out.println(factorialRecursive(5));
+//		System.out.println(factorialRecursive(5));
 		System.out.println(factorialTail(5, 1));
 //		System.out.println(fiboRecursive(7));
 	}
@@ -122,7 +122,7 @@ public class MathQuiz {
 	static int factorialTail(int n, int result) {
 		if(n < 0) throw new IllegalArgumentException("n은 0보다 작을 수 없습니다.");
 		if(n <= 1) {
-			return 1;
+			return result;
 		}
 		
 		result = n * result;

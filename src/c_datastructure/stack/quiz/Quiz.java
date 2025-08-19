@@ -27,7 +27,6 @@ public class Quiz {
             if(stack.isEmpty()) return false;
 
             char k = stack.pop();
-
             if(ch != map.get(k)){
                 return false;
             }

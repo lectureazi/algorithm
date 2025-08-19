@@ -65,9 +65,10 @@ public class _Stack<E> implements Iterable<E> {
 
         for (E e : this) {
             sb.append(e);
-            sb.append(",");
+            sb.append(", ");
         }
 
+        sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append("]");
         return sb.toString();
     }
