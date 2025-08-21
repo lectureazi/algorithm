@@ -4,7 +4,7 @@ import c_datastructure.Node;
 
 import java.util.Iterator;
 
-public class _LinkedList<E> implements Iterable<E> {
+public class _LinkedList<E> implements Iterable<E>{
 	
 	private Node<E> head;
 	private int size;
@@ -12,13 +12,14 @@ public class _LinkedList<E> implements Iterable<E> {
 	public int size() {
 		return size;
 	}
+	
 	public boolean isEmpty() {
-		return size <= 0;
+		return size == 0;
 	}
 	
-	//C
 	public boolean add(E e) {
-		Node<E> node = new Node<E>(e);
+		
+		Node<E> node = new Node<>(e);
 		
 		if(head == null) {
 			head = node;
@@ -27,7 +28,6 @@ public class _LinkedList<E> implements Iterable<E> {
 		}
 		
 		Node<E> link = head;
-		
 		while(link.next() != null) {
 			link = link.next();
 		}
@@ -37,11 +37,9 @@ public class _LinkedList<E> implements Iterable<E> {
 		return true;
 	}
 	
-	//R
+	@SuppressWarnings("unchecked")
 	public E get(int index) {
-		if(index < 0 || index >= size) {
-			throw new ArrayIndexOutOfBoundsException();
-		}
+		if(index < 0 || index >= size) throw new IndexOutOfBoundsException("인덱스 범위를 벗어났습니다.");
 		
 		Node<E> link = head;
 		for (int i = 0; i < index; i++) {
@@ -51,103 +49,109 @@ public class _LinkedList<E> implements Iterable<E> {
 		return link.data();
 	}
 	
-	//U
-	public E set(int index, E e) {
-		if(index < 0 || index >= size) {
-			throw new ArrayIndexOutOfBoundsException();
-		}
+	
+	@SuppressWarnings("unchecked")
+	public E set(int index, E element) {
+		if(index < 0 || index >= size) throw new IndexOutOfBoundsException("인덱스 범위를 벗어났습니다.");
 		
 		Node<E> link = head;
 		for (int i = 0; i < index; i++) {
 			link = link.next();
 		}
 		
-		E prev = link.data();
-		link.data(e);
-		return prev;
+		E removed = link.data();
+		link.data(element);
+		return removed;
 	}
 	
-	//D
+	
+	@SuppressWarnings("unchecked")
 	public E remove(int index) {
-		if(index < 0 || index >= size) {
-			throw new ArrayIndexOutOfBoundsException();
-		}
+		if(index < 0 || index >= size) throw new IndexOutOfBoundsException("인덱스 범위를 벗어났습니다.");
 		
 		if(index == 0) {
-			E prev = head.data();
+			E removed = head.data();
 			head = head.next();
 			size--;
-			return prev;
+			return removed;
 		}
 		
 		Node<E> prevNode = head;
 		Node<E> link = head.next();
-		for (int i = 0; i < index; i++) {
+		
+		for (int i = 1; i < index; i++) {
 			prevNode = link;
 			link = link.next();
 		}
 		
 		prevNode.next(link.next());
-		E prev = link.data();
+		E removed = link.data();
 		size--;
-		return prev;
-	}
-
-	public boolean contains(E e){
-		Node<E> link = head;
-		while(link != null) {
-			if(link.data().equals(e)) {
-				return true;
-			}
-			link = link.next();
-		}
-
-		return false;
-	}
-
-	public int indexOf(E e){
-		Node<E> link = head;
-		for(int i = 0; i < size; i++) {
-			if(link.data().equals(e)) return i;
-			link = link.next();
-		}
-
-		return -1;
+		return removed;
 	}
 	
-	//toString
 	@Override
 	public String toString() {
 		
+		if(size == 0) return null;
 		StringBuffer sb = new StringBuffer("[");
 		
 		for (int i = 0; i < size; i++) {
 			sb.append(get(i));
-			if(i == size-1) break;
 			sb.append(", ");
 		}
 		
-		sb.append(" ]");
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		sb.append("]");
 		return sb.toString();
 	}
-
+	
+	// iterator
+	
+	// contains
+	public boolean contains(Object e) {
+		Node<E> link = head;
+		
+		while(link != null) {
+			if(link.data().equals(e)) return true;
+			link = link.next();
+		}
+		
+		return false;
+	}
+	
+	// indexOf
+	public int indexOf(Object e) {
+		Node<E> link = head;
+		
+		for (int i = 0; i < size; i++) {
+			if(link.data().equals(e)) return i;
+			link = link.next();
+		}
+		
+		return -1;
+	}
+	
 	@Override
 	public Iterator<E> iterator() {
-		//익명클래스
 		return new Iterator<E>() {
-			private int pointer;
-
+			
+			private int pointer = 0;
+			
 			@Override
 			public boolean hasNext() {
-				return pointer < size();
+				return pointer < size;
 			}
-
+			
 			@Override
 			public E next() {
-				E e = get(pointer);
+				E  e = get(pointer);
 				pointer++;
 				return e;
 			}
 		};
 	}
+	
+	
+	
 }

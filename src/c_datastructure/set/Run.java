@@ -16,12 +16,11 @@ public class Run {
         School multicampus = new School("멀티캠퍼스", "삼성", 2);
         School semyeong = new School("세명초", "머리", 1);
 
-        _HashSet_P2<School> set = new _HashSet_P2<>();
+        _HashSet_P3<School> set = new _HashSet_P3<>();
         set.add(seoulUniv);
         set.add(yunsae);
         set.add(minsa);
         set.add(multicampus);
-        set.add(semyeong);
 
         // School의 이름과 레벨이 같으면 같은 객체로 판단할 수 있도록 equals와 hashCode를 override 해주세요.
         set.add(new School("서울대", "관악구 12-길 나동 301호", 4));
@@ -30,9 +29,9 @@ public class Run {
         set.remove(seoulUniv);
         System.out.println(set);
         
-//        for (School school : set){
-//            System.out.println(school);
-//        }
+        for (School school : set){
+            System.out.println(school);
+        }
 
     }
 
