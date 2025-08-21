@@ -1,13 +1,13 @@
 package e_bruteforce;
 
 import util.Measurable;
-import static util.TestUtil.createIntArray;
-import static util.TestUtil.*;
+import static util.SearchUtil.createRandomIntArray;
+import static util.SearchUtil.*;
 
 public class SelectionSort {
 
     public static void main(String[] args) {
-        int[] arr = createIntArray(100000);
+        int[] arr = createRandomIntArray(100000);
 
         measure(new Measurable() {
             @Override

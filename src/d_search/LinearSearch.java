@@ -19,8 +19,8 @@ public class LinearSearch {
 
         arr[lastIdx] = target; // 보초
         int i = 0;
-
         while(true){
+            // 조건문이 2개에서 1개로 줄어듦
             if(target == arr[i]){
                 return i < lastIdx ? i : -1;
             }

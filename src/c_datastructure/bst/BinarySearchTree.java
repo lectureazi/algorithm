@@ -69,65 +69,74 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
     
     // 노드 삭제
-    public boolean deleteNode(E targetData) {
-        if (root == null) {
-            return false;
+    public void delete(E data) {
+       
+        Node<E> parent = null;
+        Node<E> current = root;
+        
+        // Step 1: 삭제할 노드와 그 부모 노드 찾기
+        while (current != null && data.compareTo(current.data) != 0) {
+            parent = current;
+            if (data.compareTo(current.data) < 0) {
+                current = current.getLeft();
+            } else {
+                current = current.getRight();
+            }
         }
         
-        Node<E> targetNode = null;
-        Node<E> deepestNode = null;
-        Node<E> parentOfDeepestNode = null;
+        // 노드를 찾지 못한 경우
+        if (current == null) {
+            return;
+        }
         
-        Queue<Node<E>> queue = new LinkedList<>();
-        queue.add(root);
+        // 삭제할 노드가 leaf node 인 경우
+        if(current.getLeft() == null && current.getRight() == null){
+            deleteNode(parent, current, null);
+            return;
+        }
         
-        while (!queue.isEmpty()) {
-            Node<E> current = queue.poll();
-            if (current.data.equals(targetData)) {
-                targetNode = current;
-            }
-            deepestNode = current;
+        // 자식 노드가 둘인 경우
+        if(current.getLeft() != null && current.getRight() != null){
             
-            if (current.getLeft() != null) {
-                queue.add(current.getLeft());
-                if (current.getLeft() == deepestNode) {
-                    parentOfDeepestNode = current;
-                }
+            // 오른쪽 서브트리에서 가장 작은 노드(후계자) 찾기
+            Node<E> successorParent = current;
+            Node<E> successor = current.getRight();
+            
+            while (successor.getLeft() != null) {
+                successorParent = successor;
+                successor = successor.getLeft();
             }
-            if (current.getRight() != null) {
-                queue.add(current.getRight());
-                if (current.getRight() == deepestNode) {
-                    parentOfDeepestNode = current;
-                }
+            
+            // 후계자의 데이터를 현재 노드로 복사
+            current.data = successor.data;
+            
+            // 후계자 노드가 리프노드인 경우 (후계자 노드는 서브트리의 가장 작은 노드이기 때문에 왼쪽 자식 노드는 없음)
+            if(successor.getRight() == null){
+                deleteNode(successorParent, successor, null);
+                return;
             }
+            
+            deleteNode(successorParent, successor, successor.getRight());
+            return;
         }
         
-        if (targetNode == null) {
-            System.out.println("Node with data " + targetData + " not found.");
-            return false;
+        //  자식 노드가 하나만 있는 경우
+        Node<E> child = current.getLeft() != null ? current.getLeft() : current.getRight();
+        deleteNode(parent, current, child);
+    }
+    
+    private void deleteNode(Node<E> parent, Node<E> current, Node<E> child) {
+        if(parent == null) {
+            root = child;
+            return;
         }
         
-        if (targetNode == root) {
-            if (deepestNode == root) {
-                root = null;
-            } else {
-                root.data = deepestNode.data;
-                if (parentOfDeepestNode.getLeft() == deepestNode) {
-                    parentOfDeepestNode.setLeft(null);
-                } else {
-                    parentOfDeepestNode.setRight(null);
-                }
-            }
-        } else {
-            targetNode.data = deepestNode.data;
-            if (parentOfDeepestNode.getLeft() == deepestNode) {
-                parentOfDeepestNode.setLeft(null);
-            } else {
-                parentOfDeepestNode.setRight(null);
-            }
+        if(parent.getLeft() == current){
+            parent.setLeft(child);
+            return;
         }
-        System.out.println("Node with data " + targetData + " deleted.");
-        return true;
+        
+        parent.setRight(child);
     }
     
     
@@ -248,12 +257,15 @@ public class BinarySearchTree<E extends Comparable<E>> {
         _Queue<Node<E>> queue = new _Queue<>();
         _LinkedList<E> result = new _LinkedList<>();
         queue.enqueue(root);
-
+        
+        int depth = 1;
         while(!queue.isEmpty()){
+            System.out.print("depth " + depth + ": ");
             int size = queue.size();
 
             for (int i = 0; i < size; i++) {
                 Node<E> node = queue.dequeue();
+                System.out.print(node.data + " ");
                 result.add(node.data);
 
                 if(node.getLeft() != null){
@@ -264,88 +276,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
                     queue.enqueue(node.getRight());
                 }
             }
+            
+            depth++;
+            System.out.println();
         }
         
         return result;
     }
     
-//    public boolean delete(E data) {
-//        Node<E> parent = null;
-//        Node<E> current = root;
-//
-//        // 삭제할 노드와 부모 노드 찾기
-//        while (current != null && data.compareTo(current.data) != 0) {
-//            parent = current;
-//            if (data.compareTo(current.data) < 0) {
-//                current = current.left;
-//            } else {
-//                current = current.right;
-//            }
-//        }
-//
-//        if (current == null) {
-//            // 삭제할 노드를 찾지 못함
-//            System.out.println("Node with data " + data + " not found.");
-//            return false;
-//        }
-//
-//        // Case 1: 자식 노드가 없는 경우 (리프 노드)
-//        if (current.left == null && current.right == null) {
-//            if (current == root) {
-//                root = null;
-//            } else if (parent.left == current) {
-//                parent.left = null;
-//            } else {
-//                parent.right = null;
-//            }
-//        }
-//
-//        // Case 2: 자식 노드가 하나만 있는 경우
-//        else if (current.left == null) {
-//            if (current == root) {
-//                root = current.right;
-//            } else if (parent.left == current) {
-//                parent.left = current.right;
-//            } else {
-//                parent.right = current.right;
-//            }
-//        }
-//        else if (current.right == null) {
-//            if (current == root) {
-//                root = current.left;
-//            } else if (parent.left == current) {
-//                parent.left = current.left;
-//            } else {
-//                parent.right = current.left;
-//            }
-//        }
-//
-//        // Case 3: 자식 노드가 두 개 있는 경우
-//        else {
-//            Node<E> successorParent = current;
-//            Node<E> successor = current.right;
-//
-//            // 오른쪽 서브트리에서 가장 작은 값(후계자) 찾기
-//            while (successor.left != null) {
-//                successorParent = successor;
-//                successor = successor.left;
-//            }
-//
-//            // 후계자 데이터를 현재 노드로 복사
-//            current.data = successor.data;
-//
-//            // 후계자 노드 삭제
-              // 후계자 노드는 오른쪽자식노드만 존재.
-              // 후계자 부모노드 위치에 오른쪽 자식노드를 삽입. 오른쪽 자식노드가 없으면 null 이 들어감
-//            if (successorParent.left == successor) {
-//                successorParent.left = successor.right;
-//            } else {
-                  // 오른쪽 서브트리에 노드가 하나만 있는 경우
-//                successorParent.right = successor.right;
-//            }
-//        }
-//
-//        System.out.println("Node with data " + data + " deleted.");
-//        return true;
-//    }
+ 
+    
 }

@@ -2,9 +2,9 @@ package util;
 
 import java.util.Random;
 
-public class TestUtil {
+public class SearchUtil {
 
-    public static int[] createIntArray(int size) {
+    public static int[] createRandomIntArray(int size) {
         int[] arr = new int[size];
         Random random = new Random();
 

@@ -4,8 +4,13 @@ import util.Measurable;
 
 import java.util.Arrays;
 
-import static util.TestUtil.*;
+import static util.SearchUtil.*;
 
+// top-down (하향식)
+// 커다란 문제를 작은 부분으로 분할하며 해결
+// Divide (문제를 분할) Conquer(정복) Combine (합침)
+// 시작점 : 전체 배열
+// 진행 방향 : 전체 배열 -> 분할 -> 정복(분할된 배열을 정렬) -> 병합
 public class MergeSort {
 
     public static void main(String[] args) {
@@ -13,7 +18,7 @@ public class MergeSort {
         measure(new Measurable() {
             @Override
             public void measure() {
-                mergeSort(createIntArray(100000));
+                mergeSort(createRandomIntArray(1000000));
             }
         });
 
@@ -48,6 +53,7 @@ public class MergeSort {
         }
 
         while(p1 < a.length){
+            // 후위증감연산자 : 대입연산 이후 실행
             res[idx++] = a[p1++];
         }
 

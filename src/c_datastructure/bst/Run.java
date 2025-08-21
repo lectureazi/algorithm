@@ -23,6 +23,11 @@ public class Run {
         System.out.println(bst.postOrder());
         
         System.out.println("=================================");
+        
+        System.out.println("=================================");
+        System.out.println(bst.bfs());
+        bst.delete(6);
+        System.out.println("=================================");
         System.out.println(bst.bfs());
     }
 }

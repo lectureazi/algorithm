@@ -1,14 +1,11 @@
 package f_divideandconcure;
 
-import java.util.Stack;
+import java.util.Arrays;
 import util.Measurable;
 import util.SearchUtil;
 
-// CPU 캐시히트가 떨어져서 성능이 나오지 않음
-// 재귀방식은 첫 피벗을 기준으로 왼쪽 배열을 먼저 정렬한 다음 오른쪽 배열을 정렬
-// 명시적 스택 방식은 첫 피벗을 기준으로 왼쪽과 오른 쪽을 번갈아가며 정렬
-public class QuickSort {
-    
+public class QuickSortRecursive {
+
     public static void main(String[] args) {
         int[] arr = SearchUtil.createRandomIntArray(100000000);
         //int[] arr = {26, 26, 5, 37, 1, 61, 11, 59, 15, 48, 19, 26};
@@ -19,7 +16,7 @@ public class QuickSort {
                 quickSort(arr, 0, arr.length - 1);
             }
         });
-        
+
         //System.out.println(Arrays.toString(arr));
     }
     
@@ -44,34 +41,11 @@ public class QuickSort {
         SearchUtil.swap(arr, first, p2); // pivot을 가운데 요소와 swap
         return p2; // return pivot point
     }
-    
-    // 재귀를 사용하지 않는 퀵 정렬 구현
+
     static void quickSort(int[] arr, int first, int last) {
-        if (first >= last) {
-            return;
-        }
-        
-        Stack<Integer> stack = new Stack<>();
-        stack.push(first);
-        stack.push(last);
-        
-        while (!stack.isEmpty()) {
-            last = stack.pop();
-            first = stack.pop();
-            
-            int pivotIndex = partition(arr, first, last);
-            
-            // 왼쪽 부분 배열이 있다면 스택에 푸시
-            if (pivotIndex - 1 > first) {
-                stack.push(first);
-                stack.push(pivotIndex - 1);
-            }
-            
-            // 오른쪽 부분 배열이 있다면 스택에 푸시
-            if (pivotIndex + 1 < last) {
-                stack.push(pivotIndex + 1);
-                stack.push(last);
-            }
-        }
+        if(first >= last) return;
+        int pivot = partition(arr, first, last);
+        quickSort(arr, first, pivot - 1);
+        quickSort(arr, pivot + 1, last);
     }
 }

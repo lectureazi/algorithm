@@ -4,17 +4,17 @@ package d_search;
 public class BinarySearch {
 
     static int binarySearch(int[] arr, int target){
-        int pl = 0; // 왼쪽인덱스
-        int pr = arr.length-1;
+        int lp = 0; // 왼쪽인덱스
+        int rp = arr.length-1;
 
-        while(pl <= pr){
-            int center =( pl + pr)/2; // 중간 인덱스
+        while(lp <= rp){
+            int center =( lp + rp ) / 2; // 중간 인덱스
             if(arr[center] == target) return center;
 
             if(target < arr[center]) {
-                pr = center - 1;
+                rp = center - 1;
             }else{
-                pl = center + 1;
+                lp = center + 1;
             }
         }
 
@@ -22,8 +22,8 @@ public class BinarySearch {
     }
 
     public static void main(String[] args) {
-        // target : 14
+        // target : 30
         int[] arr ={1, 3, 5, 9, 10, 11, 14, 29, 30, 31, 35, 44};
-        System.out.println(binarySearch(arr, 29));
+        System.out.println(binarySearch(arr, 30));
     }
 }

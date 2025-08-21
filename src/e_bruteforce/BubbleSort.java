@@ -1,17 +1,24 @@
 package e_bruteforce;
 
 import util.Measurable;
-import static util.TestUtil.*;
+import static util.SearchUtil.*;
 
 public class BubbleSort {
 
     public static void main(String[] args) {
-        int[] arr = createIntArray(100000);
+        int[] arr = createRandomIntArray(100000);
 
         measure(new Measurable() {
             @Override
             public void measure() {
                 bubbleSort(arr);
+            }
+        });
+        
+        measure(new Measurable() {
+            @Override
+            public void measure() {
+                bubbleSort2(createRandomIntArray(100000));
             }
         });
 
