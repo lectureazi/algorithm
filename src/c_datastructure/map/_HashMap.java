@@ -2,6 +2,7 @@ package c_datastructure.map;
 
 import c_datastructure.list._LinkedList;
 import c_datastructure.set._HashSet_P3;
+import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 public class _HashMap<K, V> {
@@ -14,7 +15,6 @@ public class _HashMap<K, V> {
     public _HashMap() {
         this.table = new Object[arraySize];
     }
-
     public _HashMap(int initialCapacity) {
         this.table = new Object[initialCapacity];
     }
@@ -26,19 +26,37 @@ public class _HashMap<K, V> {
         // 정수 N을 arraySize로 나눈 나머지는 0 ~ arraySize-1
         return hashCode % arraySize;
     }
+    
+    private boolean addEntry(Entry<K,V> entry) {
+        int index = hash(entry.getKey());
+        _LinkedList<Entry<K,V>> row = (_LinkedList<Entry<K,V>>) table[index];
+        
+        if(row == null) {
+            _LinkedList<Entry<K,V>> newRow = new _LinkedList<>();
+            newRow.add(entry);
+            table[index] = newRow;
+            return true;
+        }
+        
+        if(row.contains(entry)) return false;
+        row.add(entry);
+        return true;
+    }
+
 
     private void resize() {
+        Object[] temp = Arrays.copyOf(table, arraySize);
         arraySize *= 2;
-        Object[] temp = new Object[arraySize];
-
-        for(int i = 0; i < table.length; i++){
-            if(table[i] == null) continue;
-            _LinkedList<Entry<K, V>> row = (_LinkedList<Entry<K, V>>) table[i];
-            int index = hash(row.get(0).getKey());
-            temp[index] = row;
+        table = new Object[arraySize];
+        
+        for (int i = 0; i < temp.length; i++) {
+            if(temp[i] == null) continue;
+            _LinkedList<Entry<K,V>> row = (_LinkedList<Entry<K,V>>) temp[i];
+            
+            for (Entry<K,V> e : row) {
+                addEntry(e);
+            }
         }
-
-        table = temp;
     }
 
     public V put(K key, V value) {
@@ -46,29 +64,12 @@ public class _HashMap<K, V> {
             resize();
         }
 
-        int index = hash(key);
         Entry<K, V> entry = new Entry<>(key, value);
-        _LinkedList<Entry<K,V>> row = ( _LinkedList<Entry<K,V>>) table[index];
 
-        if (row == null) {
-            createRow(entry, index);
-            entrySet.add(entry);
-            size++;
-            return null;
-        }
-
-        if (row.contains(entry)) {
-            Entry<K,V> res = row.remove(row.indexOf(entry));
-            entrySet.remove(entry);
-            row.add(entry);
-            entrySet.add(entry);
-            return res.getValue();
-        }
-
-        row.add(entry);
+        if (!addEntry(entry)) return null;
         entrySet.add(entry);
         size++;
-        return null;
+        return value;
     }
 
     public V get(K key) {
