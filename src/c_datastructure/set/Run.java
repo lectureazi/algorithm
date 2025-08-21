@@ -21,24 +21,21 @@ public class Run {
         set.add(yunsae);
         set.add(minsa);
         set.add(multicampus);
+        set.add(semyeong);
 
         // School의 이름과 레벨이 같으면 같은 객체로 판단할 수 있도록 equals와 hashCode를 override 해주세요.
         set.add(new School("서울대", "관악구 12-길 나동 301호", 4));
-
+        
         System.out.println(set);
+        System.out.println("=============================");
+        
         set.remove(seoulUniv);
         System.out.println(set);
+        
+        System.out.println("=============================");
         
         for (School school : set){
             System.out.println(school);
         }
-
     }
-
-
-
-
-
-
-
 }
