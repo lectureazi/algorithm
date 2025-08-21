@@ -35,11 +35,16 @@ public class _HashMap<K, V> {
             _LinkedList<Entry<K,V>> newRow = new _LinkedList<>();
             newRow.add(entry);
             table[index] = newRow;
+            entrySet.add(entry);
             return true;
         }
         
-        if(row.contains(entry)) return false;
+        if(row.contains(entry)){
+            row.remove(row.indexOf(entry));
+            entrySet.remove(entry);
+        }
         row.add(entry);
+        entrySet.add(entry);
         return true;
     }
 
@@ -67,7 +72,7 @@ public class _HashMap<K, V> {
         Entry<K, V> entry = new Entry<>(key, value);
 
         if (!addEntry(entry)) return null;
-        entrySet.add(entry);
+        
         size++;
         return value;
     }

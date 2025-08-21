@@ -43,6 +43,5 @@ public class Run {
         for (Entry<String, School> entry : schoolMap.entrySet()) {
             System.out.println(entry);
         }
-
     }
 }
